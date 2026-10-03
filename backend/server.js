@@ -37,6 +37,7 @@ const createRoomState = (hostToken, creatorUserId, creatorUsername) => ({
   playState: "paused",
   currentTime: 0,
   cleanupTimer: null,
+  messages: [],
 });
 
 const canControl = (participant) =>
@@ -147,6 +148,10 @@ const addRoomMember = (socket, roomId, username, room, role) => {
     playState: room.playState,
     currentTime: room.currentTime,
     videoId: room.videoId,
+  });
+
+  socket.emit("chat_history", {
+    messages: room.messages || [],
   });
 };
 
@@ -637,6 +642,56 @@ io.on("connection", (socket) => {
     if (removedSocket) {
       removedSocket.leave(cleanRoomId);
       removedSocket.data.roomId = null;
+    }
+  });
+
+  // CHAT: SEND MESSAGE & HISTORY
+  const handleIncomingChatMessage = (data) => {
+    const cleanRoomId = String(data?.roomId || socket.data.roomId || "").trim().toUpperCase();
+    const room = rooms[cleanRoomId];
+    if (!room) return;
+
+    const rawMessage = data?.message ?? data?.text;
+    const cleanMessage = String(rawMessage || "").trim();
+    if (!cleanMessage || cleanMessage.length > 500) return;
+
+    const participant = room.participants.find(
+      (user) => user.userId === socket.id
+    );
+
+    const username = participant?.username || socket.data.username || data?.username || "Anonymous";
+    const role = participant?.role || "Participant";
+
+    const chatMessage = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      roomId: cleanRoomId,
+      userId: socket.id,
+      username,
+      role,
+      message: cleanMessage,
+      timestamp: new Date().toISOString(),
+    };
+
+    if (!room.messages) room.messages = [];
+    room.messages.push(chatMessage);
+    if (room.messages.length > 100) {
+      room.messages.shift();
+    }
+
+    io.to(cleanRoomId).emit("receive_message", chatMessage);
+    io.to(cleanRoomId).emit("chat_message", chatMessage);
+  };
+
+  socket.on("send_message", handleIncomingChatMessage);
+  socket.on("chat_message", handleIncomingChatMessage);
+
+  socket.on("get_chat_history", (data) => {
+    const cleanRoomId = String(data?.roomId || socket.data.roomId || "").trim().toUpperCase();
+    const room = rooms[cleanRoomId];
+    if (room) {
+      socket.emit("chat_history", {
+        messages: room.messages || [],
+      });
     }
   });
 

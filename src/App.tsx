@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import YouTube from "react-youtube";
+import ChatBox from "./components/ChatBox";
 import "./App.css";
 
 const socket = io(
@@ -1683,6 +1684,21 @@ function App() {
             </aside>
           </div>
         </main>
+      )}
+
+      {/* FLOATING MODULAR CHAT BOX */}
+      {roomId && (
+        <ChatBox
+          socket={socket}
+          roomId={roomId}
+          currentUser={
+            currentUser || {
+              userId: socket.id || "",
+              username: username || joinUsername || "Participant",
+              role: currentRole || "Participant",
+            }
+          }
+        />
       )}
     </div>
   );
