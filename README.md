@@ -2,8 +2,7 @@
 
 A real-time watch room where a Host and approved Moderators control a shared YouTube video. Participants can watch, request playback changes, and see room membership and roles.
 
-**Live app:** https://youtube-watch-party-system-production.up.railway.app
-
+**Live app:** https://web-production-854d7.up.railway.app
 ## Features
 
 - Create a room and share its six-character code; the creator is the Host.
