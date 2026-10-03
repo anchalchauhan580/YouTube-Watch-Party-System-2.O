@@ -6,8 +6,8 @@ import "./App.css";
 
 const socket = io(
   import.meta.env.VITE_SOCKET_URL ||
-    import.meta.env.VITE_SOCKET_SERVER_URL ||
-    (import.meta.env.DEV ? "http://localhost:5000" : window.location.origin),
+  import.meta.env.VITE_SOCKET_SERVER_URL ||
+  (import.meta.env.DEV ? "http://localhost:5000" : window.location.origin),
   {
     autoConnect: true,
     transports: ["websocket", "polling"],
@@ -1113,19 +1113,18 @@ function App() {
 
           {roomId && currentRole && (
             <span
-              className={`role-chip ${
-                currentRole === "Host"
+              className={`role-chip ${currentRole === "Host"
                   ? "host"
                   : currentRole === "Moderator"
-                  ? "moderator"
-                  : "participant"
-              }`}
+                    ? "moderator"
+                    : "participant"
+                }`}
             >
               {isHost
                 ? "You're the host"
                 : currentRole === "Moderator"
-                ? "You're a moderator"
-                : "Participant"}
+                  ? "You're a moderator"
+                  : "Participant"}
             </span>
           )}
 
@@ -1340,8 +1339,8 @@ function App() {
                     canControl
                       ? "Paste a YouTube link to switch videos"
                       : currentRole === "Participant"
-                      ? "Paste a YouTube link to request a video change"
-                      : "Waiting for room access..."
+                        ? "Paste a YouTube link to request a video change"
+                        : "Waiting for room access..."
                   }
                   value={videoUrl}
                   onChange={(e) => setVideoUrl(e.target.value)}
@@ -1542,13 +1541,12 @@ function App() {
                                 )}
                               </div>
                               <span
-                                className={`role-chip ${
-                                  user.role === "Host"
+                                className={`role-chip ${user.role === "Host"
                                     ? "host"
                                     : user.role === "Moderator"
-                                    ? "moderator"
-                                    : "participant"
-                                }`}
+                                      ? "moderator"
+                                      : "participant"
+                                  }`}
                               >
                                 {user.role}
                               </span>
@@ -1561,9 +1559,8 @@ function App() {
                               <div className="role-segmented-toggle">
                                 <button
                                   type="button"
-                                  className={`segment-btn ${
-                                    user.role === "Participant" ? "active" : ""
-                                  }`}
+                                  className={`segment-btn ${user.role === "Participant" ? "active" : ""
+                                    }`}
                                   onClick={() =>
                                     assignRole(user.userId, "Participant")
                                   }
@@ -1572,9 +1569,8 @@ function App() {
                                 </button>
                                 <button
                                   type="button"
-                                  className={`segment-btn ${
-                                    user.role === "Moderator" ? "active" : ""
-                                  }`}
+                                  className={`segment-btn ${user.role === "Moderator" ? "active" : ""
+                                    }`}
                                   onClick={() =>
                                     assignRole(user.userId, "Moderator")
                                   }
@@ -1583,9 +1579,8 @@ function App() {
                                 </button>
                                 <button
                                   type="button"
-                                  className={`segment-btn ${
-                                    user.role === "Host" ? "active" : ""
-                                  }`}
+                                  className={`segment-btn ${user.role === "Host" ? "active" : ""
+                                    }`}
                                   onClick={() => {
                                     if (
                                       window.confirm(
@@ -1630,8 +1625,26 @@ function App() {
                                   onClick={() =>
                                     setConfirmRemoveUserId(user.userId)
                                   }
+                                  title="Remove participant"
+                                  aria-label="Remove participant"
                                 >
-                                  Remove
+                                  <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M3 6h18" />
+                                    <path d="M8 6V4h8v2" />
+                                    <path d="M19 6l-1 14H6L5 6" />
+                                    <path d="M10 11v5" />
+                                    <path d="M14 11v5" />
+                                  </svg>
                                 </button>
                               )}
                             </div>
@@ -1657,8 +1670,8 @@ function App() {
                           {request.action === "change_video"
                             ? "a video change"
                             : request.action === "seek"
-                            ? `a seek to ${request.value} seconds`
-                            : `to ${request.action}`}
+                              ? `a seek to ${request.value} seconds`
+                              : `to ${request.action}`}
                         </div>
                         <div className="control-request-review-actions">
                           <button
