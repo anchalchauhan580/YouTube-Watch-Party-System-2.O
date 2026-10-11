@@ -53,6 +53,3 @@ Control requests follow the same authority boundary: the server accepts requests
 | Moderator | Play, pause, seek, change video, approve or decline requests |
 | Participant | Watch and request playback or video changes |
 
-## MVP Limitations
-
-Rooms and playback state are in-memory and disappear when the backend restarts. The backend is intended to run as a single instance; multiple instances need shared room storage and a Socket.IO adapter such as the Redis adapter. Login, persistent storage, chat, and host transfer are not included.
